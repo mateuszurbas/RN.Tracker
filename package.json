@@ -23,6 +23,9 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
+    "mobx": "^6.6.2",
+    "mobx-react-lite": "^3.4.0",
+    "mobx-state-tree": "^5.1.6",
     "react": "18.1.0",
     "react-native": "0.70.4",
     "react-native-vector-icons": "^9.2.0",

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
-import { TrackerItem } from "@components/tracker-item";
+import { RootStore, RootStoreModel, RootStoreProvider } from "@models/root-store";
+import { DashboardScreen } from "@screens/dashboard";
 import { Tracker, TrackerProject } from "@ts/tracker";
 import { renderCond } from "@utils/rendering";
 import { storageGetItem, StorageKey } from "@utils/storage";
@@ -28,8 +28,9 @@ const mockTrackers: Tracker[] = [
 ];
 
 const App: FC = () => {
+  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
+
   const [isReady, setIsReady] = useState(false);
-  const [trackers, setTrackers] = useState(mockTrackers);
 
   useEffect(() => {
     initApplication();
@@ -37,55 +38,24 @@ const App: FC = () => {
 
   const initApplication = async () => {
     const data = await storageGetItem(StorageKey.TrackerData);
-    console.log(data);
+    await setupStore(data);
     setIsReady(true);
   };
 
-  const updateTracker = (tracker: Tracker) => {
-    const newTrackers = [...trackers];
-    const updatedTrackerIndex = newTrackers.findIndex((a) => a.id === tracker.id);
-    newTrackers[updatedTrackerIndex] = tracker;
-    setTrackers(newTrackers);
+  const setupStore = async (data: Tracker[]) => {
+    const initTrackers = data || mockTrackers;
+
+    const rootStoreInit = RootStoreModel.create({
+      trackers: { trackerList: initTrackers },
+    });
+    setRootStore(rootStoreInit);
   };
 
-  const trackerList = trackers.map((tracker) => {
-    const handleOnStart = () => {
-      const newTracker: Tracker = {
-        ...tracker,
-        startActiveDate: new Date(),
-      };
-
-      updateTracker(newTracker);
-    };
-
-    const handleOnStop = () => {
-      if (tracker.startActiveDate) {
-        const activeDurationCount = new Date().getTime() - tracker.startActiveDate.getTime();
-
-        const newTracker: Tracker = {
-          ...tracker,
-          duration: tracker.duration + activeDurationCount,
-          startActiveDate: undefined,
-        };
-
-        updateTracker(newTracker);
-      }
-    };
-
-    return (
-      <TrackerItem
-        key={tracker.id}
-        name={tracker.name}
-        project={tracker.project}
-        duration={tracker.duration}
-        startActiveDate={tracker.startActiveDate}
-        onStart={handleOnStart}
-        onStop={handleOnStop}
-      />
-    );
-  });
-
-  return renderCond(isReady, () => <SafeAreaView>{trackerList}</SafeAreaView>);
+  return renderCond(isReady, () => (
+    <RootStoreProvider value={rootStore as RootStore}>
+      <DashboardScreen />
+    </RootStoreProvider>
+  ));
 };
 
 export default App;
