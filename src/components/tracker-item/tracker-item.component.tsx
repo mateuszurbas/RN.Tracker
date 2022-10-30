@@ -24,7 +24,7 @@ export const TrackerItem: FC<TrackerItemProps> = ({
   onStart,
   onStop,
 }: TrackerItemProps) => {
-  const [currentDuration, setCurrentDuration] = useState("00:00:00");
+  const [currentDuration, setCurrentDuration] = useState("--:--:--");
 
   const isActive = Boolean(startActiveDate);
 

@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import { Tracker } from "@ts/tracker";
+import { StorageKey, storageSetItem } from "@utils/storage";
 
 export const TrackersModel = types
   .model({})
@@ -25,6 +26,7 @@ export const TrackersModel = types
       },
       stopTrackers: () => {
         const updatedTrackerList = stopTrackerList([...self.trackerList]);
+        storageSetItem(StorageKey.TrackerData, updatedTrackerList);
         self.trackerList = updatedTrackerList;
       },
       activateTracker: (id: string) => {
@@ -36,6 +38,7 @@ export const TrackersModel = types
             startActiveDate: new Date(),
           };
         }
+        storageSetItem(StorageKey.TrackerData, updatedTrackerList);
         self.trackerList = updatedTrackerList;
       },
     };

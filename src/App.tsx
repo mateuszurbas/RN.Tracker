@@ -7,29 +7,27 @@ import { storageGetItem, StorageKey } from "@utils/storage";
 
 const mockTrackers: Tracker[] = [
   {
-    id: "1",
+    id: "adw1",
     name: "Test",
     project: TrackerProject.Mango,
     duration: 0,
     startActiveDate: new Date(),
   },
   {
-    id: "2",
+    id: "dawd2",
     name: "Test 1",
     project: TrackerProject.KiwiAndCo,
     duration: 12300,
   },
   {
-    id: "3",
+    id: "asd33",
     name: "Test 2",
     project: TrackerProject.UXReview,
     duration: 20123123,
   },
 ];
-
 const App: FC = () => {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
-
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -37,16 +35,22 @@ const App: FC = () => {
   }, []);
 
   const initApplication = async () => {
-    const data = await storageGetItem(StorageKey.TrackerData);
-    await setupStore(data);
+    await setupStore();
     setIsReady(true);
   };
 
-  const setupStore = async (data: Tracker[]) => {
-    const initTrackers = data || mockTrackers;
+  const setupStore = async () => {
+    // TODO: MOCK DATA - on release should be empty array
+    const restoredTrackerList: Tracker[] =
+      (await storageGetItem(StorageKey.TrackerData)) || mockTrackers;
+
+    const parsedTrackerList = restoredTrackerList.map((tracker) => ({
+      ...tracker,
+      startActiveDate: tracker.startActiveDate ? new Date(tracker.startActiveDate) : undefined,
+    }));
 
     const rootStoreInit = RootStoreModel.create({
-      trackers: { trackerList: initTrackers },
+      trackers: { trackerList: parsedTrackerList },
     });
     setRootStore(rootStoreInit);
   };
