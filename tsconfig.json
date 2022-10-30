@@ -11,6 +11,7 @@
       "@theme": ["src/theme"],
       "@ts/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"]
-    }
+    },
+    "types": ["jest", "@types/styled-components-react-native"]
   }
 }
