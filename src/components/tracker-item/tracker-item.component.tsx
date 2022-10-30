@@ -30,7 +30,7 @@ export const TrackerItem: FC<TrackerItemProps> = ({
 
   useEffect(() => {
     if (startActiveDate) {
-      const interval = setInterval(getCurrentDuration, 1000);
+      const interval = setInterval(getCurrentDuration, 100);
       return () => clearInterval(interval);
     } else {
       getCurrentDuration();
