@@ -3,6 +3,8 @@ export const color = {
   black: "#000000",
   white: "#ffffff",
   dark: "#161722",
+
+  red: "#900",
 } as const;
 
 type Keys = keyof typeof color;

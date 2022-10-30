@@ -8,12 +8,12 @@ type ContainerStyledProps = {
 };
 
 const regularFontStyles = css`
-  font-size: ${fontSize.$13};
+  font-size: ${fontSize.$15};
   font-weight: ${fontWeight.regular};
 `;
 
 const headerFontStyles = css`
-  font-size: ${fontSize.$15};
+  font-size: ${fontSize.$17};
   font-weight: ${fontWeight.bold};
 `;
 
@@ -23,7 +23,7 @@ export const Container = styled.Text<ContainerStyledProps>`
 
   ${({ size }) =>
     cond([
-      [size === CommonTextSize.$13, regularFontStyles],
-      [size === CommonTextSize.$15, headerFontStyles],
+      [size === CommonTextSize.$15, regularFontStyles],
+      [size === CommonTextSize.$17, headerFontStyles],
     ])}
 `;

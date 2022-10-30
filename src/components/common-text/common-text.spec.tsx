@@ -7,7 +7,7 @@ import { CommonTextProps, CommonTextSize } from "./common-text.types";
 const commonProps: TestCommonComponentProps & CommonTextProps = {
   testID: "testID",
   children: "text",
-  size: CommonTextSize.$15,
+  size: CommonTextSize.$17,
 };
 
 describe("CommonText", () => {
