@@ -1,19 +1,26 @@
 import React, { FC, useMemo } from "react";
 import { observer } from "mobx-react-lite";
-import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TrackerGroup } from "@components/tracker-group";
 import { TrackerItem } from "@components/tracker-item";
 import { useStores } from "@models/root-store";
 import { groupBy } from "@utils/normalize";
 import { renderCond } from "@utils/rendering";
 import {
-  ActiveTrackerContainer,
+  Header,
   Container,
   Content,
   TrackerGroupContainer,
+  ActiveTrackerContainer,
+  ActionButton,
+  AddIcon,
+  TextButton,
+  ButtonSection,
 } from "./dashboard.styles";
 
 export const DashboardScreen: FC = observer(() => {
+  const saveArea = useSafeAreaInsets();
+
   const {
     trackers: { trackerList, activateTracker, stopTrackers, activeTracker },
   } = useStores();
@@ -52,12 +59,21 @@ export const DashboardScreen: FC = observer(() => {
     );
   });
 
-  const header = <View />;
+  const header = (
+    <Header paddingTop={saveArea.top}>
+      <ActionButton>
+        <ButtonSection>
+          <TextButton>Add</TextButton>
+          <AddIcon />
+        </ButtonSection>
+      </ActionButton>
+    </Header>
+  );
 
   return (
     <>
+      {header}
       <Container>
-        {header}
         <Content>{trackers}</Content>
       </Container>
       {active}

@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import { RootStore, RootStoreModel, RootStoreProvider } from "@models/root-store";
 import { DashboardScreen } from "@screens/dashboard";
 import { Tracker, TrackerProject } from "@ts/tracker";
@@ -71,7 +72,9 @@ const App: FC = () => {
   return renderCond(isReady, () => (
     <View style={styles.container}>
       <RootStoreProvider value={rootStore as RootStore}>
-        <DashboardScreen />
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <DashboardScreen />
+        </SafeAreaProvider>
       </RootStoreProvider>
     </View>
   ));

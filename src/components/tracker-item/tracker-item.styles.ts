@@ -45,7 +45,7 @@ export const Project = styled(CommonText).attrs({
       [
         type === TrackerProject.KiwiAndCo,
         css`
-          color: ${color.green};
+          color: ${color.green1};
         `,
       ],
       [
@@ -73,7 +73,7 @@ export const Circle = styled.View<ProjectProps>`
       [
         type === TrackerProject.KiwiAndCo,
         css`
-          background-color: ${color.green};
+          background-color: ${color.green1};
         `,
       ],
       [
