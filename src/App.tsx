@@ -1,91 +1,90 @@
 import React, { FC, useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
-import { TrackerItem } from "@components/tracker-item";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
+import { RootStore, RootStoreModel, RootStoreProvider } from "@models/root-store";
+import { DashboardScreen } from "@screens/dashboard";
 import { Tracker, TrackerProject } from "@ts/tracker";
 import { renderCond } from "@utils/rendering";
 import { storageGetItem, StorageKey } from "@utils/storage";
+import { color } from "./theme/color";
 
 const mockTrackers: Tracker[] = [
   {
-    id: "1",
+    id: "test-id-1",
     name: "Test",
     project: TrackerProject.Mango,
     duration: 0,
+    startDate: new Date(),
     startActiveDate: new Date(),
   },
   {
-    id: "2",
+    id: "test-id-2",
+    name: "Test",
+    project: TrackerProject.Mango,
+    duration: 32300,
+    startDate: new Date(),
+  },
+  {
+    id: "test-id-3",
     name: "Test 1",
     project: TrackerProject.KiwiAndCo,
     duration: 12300,
+    startDate: new Date(new Date().setDate(new Date().getDate() - 1)),
   },
   {
-    id: "3",
+    id: "test-id-4",
     name: "Test 2",
     project: TrackerProject.UXReview,
     duration: 20123123,
+    startDate: new Date(new Date().setDate(new Date().getDate() - 1)),
   },
 ];
-
 const App: FC = () => {
+  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
   const [isReady, setIsReady] = useState(false);
-  const [trackers, setTrackers] = useState(mockTrackers);
 
   useEffect(() => {
     initApplication();
   }, []);
 
   const initApplication = async () => {
-    const data = await storageGetItem(StorageKey.TrackerData);
-    console.log(data);
+    await setupStore();
     setIsReady(true);
   };
 
-  const updateTracker = (tracker: Tracker) => {
-    const newTrackers = [...trackers];
-    const updatedTrackerIndex = newTrackers.findIndex((a) => a.id === tracker.id);
-    newTrackers[updatedTrackerIndex] = tracker;
-    setTrackers(newTrackers);
+  const setupStore = async () => {
+    // TODO: MOCK DATA - on release should be empty array
+    const restoredTrackerList: Tracker[] =
+      (await storageGetItem(StorageKey.TrackerData)) || mockTrackers;
+
+    const parsedTrackerList = restoredTrackerList.map((tracker) => ({
+      ...tracker,
+      startActiveDate: tracker.startActiveDate ? new Date(tracker.startActiveDate) : undefined,
+      startDate: new Date(tracker.startDate),
+    }));
+
+    const rootStoreInit = RootStoreModel.create({
+      trackers: { trackerList: parsedTrackerList },
+    });
+    setRootStore(rootStoreInit);
   };
 
-  const trackerList = trackers.map((tracker) => {
-    const handleOnStart = () => {
-      const newTracker: Tracker = {
-        ...tracker,
-        startActiveDate: new Date(),
-      };
-
-      updateTracker(newTracker);
-    };
-
-    const handleOnStop = () => {
-      if (tracker.startActiveDate) {
-        const activeDurationCount = new Date().getTime() - tracker.startActiveDate.getTime();
-
-        const newTracker: Tracker = {
-          ...tracker,
-          duration: tracker.duration + activeDurationCount,
-          startActiveDate: undefined,
-        };
-
-        updateTracker(newTracker);
-      }
-    };
-
-    return (
-      <TrackerItem
-        key={tracker.id}
-        name={tracker.name}
-        project={tracker.project}
-        duration={tracker.duration}
-        startActiveDate={tracker.startActiveDate}
-        onStart={handleOnStart}
-        onStop={handleOnStop}
-      />
-    );
-  });
-
-  return renderCond(isReady, () => <SafeAreaView>{trackerList}</SafeAreaView>);
+  return renderCond(isReady, () => (
+    <View style={styles.container}>
+      <RootStoreProvider value={rootStore as RootStore}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <DashboardScreen />
+        </SafeAreaProvider>
+      </RootStoreProvider>
+    </View>
+  ));
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: color.grey,
+    flex: 1,
+  },
+});
 
 export default App;

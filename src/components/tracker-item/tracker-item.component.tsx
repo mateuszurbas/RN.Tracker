@@ -2,15 +2,18 @@ import React, { FC, useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { color } from "@theme";
 import { renderCond } from "@utils/rendering";
-import { formatDuration } from "@utils/time";
+import { FormatDuration, formatDuration, sumDuration } from "@utils/time";
 import {
   ActionButton,
   ActionSection,
+  Circle,
   Container,
   Duration,
   DurationContainer,
   InformationSection,
   Project,
+  ProjectContainer,
+  ProjectSection,
   Title,
 } from "./tracker-item.styles";
 import { TrackerItemProps } from "./tracker-item.types";
@@ -24,13 +27,13 @@ export const TrackerItem: FC<TrackerItemProps> = ({
   onStart,
   onStop,
 }: TrackerItemProps) => {
-  const [currentDuration, setCurrentDuration] = useState("00:00:00");
+  const [currentDuration, setCurrentDuration] = useState("--:--:--");
 
   const isActive = Boolean(startActiveDate);
 
   useEffect(() => {
     if (startActiveDate) {
-      const interval = setInterval(getCurrentDuration, 1000);
+      const interval = setInterval(getCurrentDuration, 100);
       return () => clearInterval(interval);
     } else {
       getCurrentDuration();
@@ -38,12 +41,8 @@ export const TrackerItem: FC<TrackerItemProps> = ({
   }, [startActiveDate]);
 
   const getCurrentDuration = () => {
-    const activeDateDuration = startActiveDate
-      ? new Date().getTime() - startActiveDate.getTime()
-      : 0;
-    const currentDuration = duration + activeDateDuration;
-
-    setCurrentDuration(formatDuration(currentDuration));
+    const sum = sumDuration(duration, startActiveDate);
+    setCurrentDuration(formatDuration(sum, FormatDuration.Detail));
   };
 
   const handleAction = isActive ? onStop : onStart;
@@ -58,7 +57,12 @@ export const TrackerItem: FC<TrackerItemProps> = ({
     <Container testID={testID}>
       <InformationSection>
         <Title>{name}</Title>
-        <Project>{project}</Project>
+        <ProjectSection>
+          <Circle trackerProject={project} />
+          <ProjectContainer>
+            <Project trackerProject={project}>{project}</Project>
+          </ProjectContainer>
+        </ProjectSection>
       </InformationSection>
 
       <ActionSection>

@@ -1,7 +1,13 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { CommonText, CommonTextSize } from "@components/common-text";
 import { Touchable } from "@components/touchable";
 import { color, fontWeight, spacing } from "@theme";
+import { TrackerProject } from "@ts/tracker";
+import { cond } from "@utils/logic";
+
+type ProjectProps = {
+  trackerProject: TrackerProject;
+};
 
 export const Container = styled.View`
   background-color: ${color.white};
@@ -19,10 +25,70 @@ export const Title = styled(CommonText).attrs({
   font-weight: ${fontWeight.semiBold};
 `;
 
+export const ProjectSection = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: ${spacing.$4};
+`;
+
+export const ProjectContainer = styled.View`
+  margin-left: ${spacing.$4};
+`;
+
 export const Project = styled(CommonText).attrs({
   size: CommonTextSize.$15,
-})`
-  color: ${color.black};
+})<ProjectProps>`
+  font-weight: ${fontWeight.semiBold};
+
+  ${({ trackerProject: type }) =>
+    cond([
+      [
+        type === TrackerProject.KiwiAndCo,
+        css`
+          color: ${color.green1};
+        `,
+      ],
+      [
+        type === TrackerProject.Mango,
+        css`
+          color: ${color.yellow};
+        `,
+      ],
+      [
+        type === TrackerProject.UXReview,
+        css`
+          color: ${color.blue};
+        `,
+      ],
+    ])}
+`;
+
+export const Circle = styled.View<ProjectProps>`
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+
+  ${({ trackerProject: type }) =>
+    cond([
+      [
+        type === TrackerProject.KiwiAndCo,
+        css`
+          background-color: ${color.green1};
+        `,
+      ],
+      [
+        type === TrackerProject.Mango,
+        css`
+          background-color: ${color.yellow};
+        `,
+      ],
+      [
+        type === TrackerProject.UXReview,
+        css`
+          background-color: ${color.blue};
+        `,
+      ],
+    ])}
 `;
 
 export const ActionSection = styled.View`
