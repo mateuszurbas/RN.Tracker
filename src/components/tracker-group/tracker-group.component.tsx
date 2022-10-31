@@ -15,6 +15,7 @@ export const TrackerGroup: FC<TrackerGroupProps> = ({
   testID,
   title,
   trackers,
+  onPress,
   activateTracker,
   stopTrackers,
 }: TrackerGroupProps) => {
@@ -39,6 +40,8 @@ export const TrackerGroup: FC<TrackerGroupProps> = ({
   const items = trackers.map((tracker, i) => {
     const handleOnStart = () => activateTracker(tracker.id);
     const handleOnStop = () => stopTrackers();
+    const handleOnPress = () => onPress(tracker);
+
     const line = renderCond(trackers.length - 1 > i, () => <Line />);
 
     return (
@@ -48,6 +51,7 @@ export const TrackerGroup: FC<TrackerGroupProps> = ({
           project={tracker.project}
           duration={tracker.duration}
           startActiveDate={tracker.startActiveDate}
+          onPress={handleOnPress}
           onStart={handleOnStart}
           onStop={handleOnStop}
         />

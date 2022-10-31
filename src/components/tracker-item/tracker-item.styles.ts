@@ -9,7 +9,7 @@ type ProjectProps = {
   trackerProject: TrackerProject;
 };
 
-export const Container = styled.View`
+export const Container = styled(Touchable)`
   background-color: ${color.white};
   padding: ${spacing.$15} ${spacing.$10};
   flex-direction: row;
