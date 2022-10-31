@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src --fix --ext .js,.ts,.tsx",
     "adb": "adb reverse tcp:8081 tcp:8081",
     "compile": "bash -c tsc --noEmit -p . --pretty",
     "prepare": "husky install",

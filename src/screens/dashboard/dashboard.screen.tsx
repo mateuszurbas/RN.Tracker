@@ -2,16 +2,16 @@ import React, { FC, useMemo } from "react";
 import { observer } from "mobx-react-lite";
 import { View } from "react-native";
 import { TrackerGroup } from "@components/tracker-group";
+import { TrackerItem } from "@components/tracker-item";
 import { useStores } from "@models/root-store";
 import { groupBy } from "@utils/normalize";
+import { renderCond } from "@utils/rendering";
 import {
   ActiveTrackerContainer,
   Container,
   Content,
   TrackerGroupContainer,
 } from "./dashboard.styles";
-import { renderCond } from "@utils/rendering";
-import { TrackerItem } from "@components/tracker-item";
 
 export const DashboardScreen: FC = observer(() => {
   const {

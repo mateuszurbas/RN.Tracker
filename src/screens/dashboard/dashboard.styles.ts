@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { borderRadius, boxShadow, color, spacing } from "@theme";
+import { boxShadow, color, spacing } from "@theme";
 
 export const Container = styled.SafeAreaView`
   flex: 1;
