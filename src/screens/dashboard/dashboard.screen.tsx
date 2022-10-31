@@ -1,12 +1,14 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TrackerGroup } from "@components/tracker-group";
 import { TrackerItem } from "@components/tracker-item";
 import { useStores } from "@models/root-store";
+import { Tracker } from "@ts/tracker";
 import { groupBy } from "@utils/normalize";
 import { renderCond } from "@utils/rendering";
+import { DashboardDetailModal } from "./components/dashboard-detail-modal";
 import {
   Header,
   Container,
@@ -20,18 +22,33 @@ import {
 } from "./dashboard.styles";
 
 export const DashboardScreen: FC = observer(() => {
+  const [selectedTracker, setSelectedTracker] = useState<Tracker>();
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+
   const saveArea = useSafeAreaInsets();
+
   const paddingTop = Platform.OS === "ios" ? saveArea.top : 10;
   const paddingBottom = Platform.OS === "ios" ? saveArea.bottom : 10;
 
   const {
-    trackers: { trackerList, activateTracker, stopTrackers, activeTracker },
+    trackers: { trackerList, activateTracker, stopTrackers, activeTracker, removeTracker },
   } = useStores();
 
   const groupByDateTrackerList = useMemo(
     () => groupBy(trackerList, (tracker) => tracker.startDate?.toDateString()),
     [trackerList],
   );
+
+  const handleOnPressTracker = (tracker: Tracker) => {
+    setSelectedTracker(tracker);
+    setIsDetailModalVisible(true);
+  };
+
+  const handleOnRemoveTracker = () => {
+    if (selectedTracker) {
+      removeTracker(selectedTracker.id);
+    }
+  };
 
   const trackers = Object.entries(groupByDateTrackerList).map(([key, list]) => (
     <TrackerGroupContainer key={key}>
@@ -40,6 +57,7 @@ export const DashboardScreen: FC = observer(() => {
         trackers={list}
         activateTracker={activateTracker}
         stopTrackers={stopTrackers}
+        onPress={handleOnPressTracker}
       />
     </TrackerGroupContainer>
   ));
@@ -80,6 +98,12 @@ export const DashboardScreen: FC = observer(() => {
         <Content>{trackers}</Content>
       </Container>
       {active}
+      <DashboardDetailModal
+        visible={isDetailModalVisible}
+        toggleVisibility={() => setIsDetailModalVisible(!isDetailModalVisible)}
+        tracker={selectedTracker}
+        onRemove={handleOnRemoveTracker}
+      />
     </>
   );
 });

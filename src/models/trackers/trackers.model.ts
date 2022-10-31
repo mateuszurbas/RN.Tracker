@@ -29,6 +29,11 @@ export const TrackersModel = types
         storageSetItem(StorageKey.TrackerData, updatedTrackerList);
         self.trackerList = updatedTrackerList;
       },
+      removeTracker: (id: string) => {
+        const updatedTrackerList = self.trackerList.filter((t) => t.id !== id);
+        storageSetItem(StorageKey.TrackerData, updatedTrackerList);
+        self.trackerList = updatedTrackerList;
+      },
       activateTracker: (id: string) => {
         const updatedTrackerList = stopTrackerList([...self.trackerList]);
         const updatedTrackerIndex = updatedTrackerList.findIndex((t) => t.id === id);

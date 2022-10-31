@@ -6,6 +6,7 @@ export type TrackerItemProps = CommonComponentProps & {
   project: TrackerProject;
   startActiveDate?: Date;
   duration: number;
+  onPress?: () => void;
   onStart: () => void;
   onStop: () => void;
 };

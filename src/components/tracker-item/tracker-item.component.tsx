@@ -24,6 +24,7 @@ export const TrackerItem: FC<TrackerItemProps> = ({
   project,
   duration,
   startActiveDate,
+  onPress,
   onStart,
   onStop,
 }: TrackerItemProps) => {
@@ -54,7 +55,7 @@ export const TrackerItem: FC<TrackerItemProps> = ({
   );
 
   return (
-    <Container testID={testID}>
+    <Container testID={testID} onPress={onPress} disabled={!onPress}>
       <InformationSection>
         <Title>{name}</Title>
         <ProjectSection>
