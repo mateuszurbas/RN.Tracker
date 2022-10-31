@@ -8,6 +8,10 @@ type HeaderProps = {
   paddingTop: number;
 };
 
+type ActiveTrackerContainerProps = {
+  paddingBottom: number;
+};
+
 export const Header = styled.View<HeaderProps>`
   ${boxShadow.regular};
   z-index: 1;
@@ -33,10 +37,13 @@ export const TrackerGroupContainer = styled.View`
   margin-bottom: ${spacing.$15};
 `;
 
-export const ActiveTrackerContainer = styled.View`
+export const ActiveTrackerContainer = styled.View<ActiveTrackerContainerProps>`
   ${boxShadow.regular}
   background-color: ${color.white};
-  padding: ${spacing.$10} ${spacing.$15} ${spacing.$30};
+  ${({ paddingBottom }) =>
+    css`
+      padding: ${spacing.$10} ${spacing.$15} ${paddingBottom}px;
+    `};
 `;
 
 export const ActionButton = styled(Touchable).attrs({

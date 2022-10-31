@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from "react";
 import { observer } from "mobx-react-lite";
+import { Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TrackerGroup } from "@components/tracker-group";
 import { TrackerItem } from "@components/tracker-item";
@@ -20,6 +21,8 @@ import {
 
 export const DashboardScreen: FC = observer(() => {
   const saveArea = useSafeAreaInsets();
+  const paddingTop = Platform.OS === "ios" ? saveArea.top : 10;
+  const paddingBottom = Platform.OS === "ios" ? saveArea.bottom : 10;
 
   const {
     trackers: { trackerList, activateTracker, stopTrackers, activeTracker },
@@ -46,7 +49,7 @@ export const DashboardScreen: FC = observer(() => {
     const handleOnStop = () => stopTrackers();
 
     return (
-      <ActiveTrackerContainer>
+      <ActiveTrackerContainer paddingBottom={paddingBottom}>
         <TrackerItem
           name={activeTracker.name}
           project={activeTracker.project}
@@ -60,7 +63,7 @@ export const DashboardScreen: FC = observer(() => {
   });
 
   const header = (
-    <Header paddingTop={saveArea.top}>
+    <Header paddingTop={paddingTop}>
       <ActionButton>
         <ButtonSection>
           <TextButton>Add</TextButton>
