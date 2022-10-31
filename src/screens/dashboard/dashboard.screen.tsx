@@ -9,6 +9,7 @@ import { Tracker, TrackerProject } from "@ts/tracker";
 import { groupBy } from "@utils/normalize";
 import { renderCond } from "@utils/rendering";
 import { DashboardDetailModal } from "./components/dashboard-detail-modal";
+import { DashboardNewModal } from "./components/dashboard-new-modal";
 import {
   Header,
   Container,
@@ -24,6 +25,7 @@ import {
 export const DashboardScreen: FC = observer(() => {
   const [selectedTracker, setSelectedTracker] = useState<Tracker>();
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+  const [isNewModalVisible, setIsNewModalVisible] = useState(false);
 
   const saveArea = useSafeAreaInsets();
 
@@ -63,14 +65,6 @@ export const DashboardScreen: FC = observer(() => {
     }
   };
 
-  // TODO: Add tracker from modal
-  const addNewTracker = () => {
-    handleOnAddTracker({
-      name: "Test 1",
-      project: TrackerProject.UXReview,
-    });
-  };
-
   const trackers = Object.entries(groupByDateTrackerList).map(([key, list]) => (
     <TrackerGroupContainer key={key}>
       <TrackerGroup
@@ -103,7 +97,7 @@ export const DashboardScreen: FC = observer(() => {
 
   const header = (
     <Header paddingTop={paddingTop}>
-      <ActionButton onPress={addNewTracker}>
+      <ActionButton onPress={() => setIsNewModalVisible(true)}>
         <ButtonSection>
           <TextButton>Add</TextButton>
           <AddIcon />
@@ -124,6 +118,11 @@ export const DashboardScreen: FC = observer(() => {
         toggleVisibility={() => setIsDetailModalVisible(!isDetailModalVisible)}
         tracker={selectedTracker}
         onRemove={handleOnRemoveTracker}
+      />
+      <DashboardNewModal
+        visible={isNewModalVisible}
+        toggleVisibility={() => setIsNewModalVisible(!isNewModalVisible)}
+        onCreate={handleOnAddTracker}
       />
     </>
   );
