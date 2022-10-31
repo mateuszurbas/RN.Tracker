@@ -8,6 +8,7 @@ export type Tracker = {
   id: string;
   name: string;
   project: TrackerProject;
+  startDate: Date;
   startActiveDate?: Date;
   duration: number;
 };

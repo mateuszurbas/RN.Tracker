@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { color } from "@theme";
 import { renderCond } from "@utils/rendering";
-import { formatDuration } from "@utils/time";
+import { FormatDuration, formatDuration, sumDuration } from "@utils/time";
 import {
   ActionButton,
   ActionSection,
@@ -38,12 +38,8 @@ export const TrackerItem: FC<TrackerItemProps> = ({
   }, [startActiveDate]);
 
   const getCurrentDuration = () => {
-    const activeDateDuration = startActiveDate
-      ? new Date().getTime() - startActiveDate.getTime()
-      : 0;
-    const currentDuration = duration + activeDateDuration;
-
-    setCurrentDuration(formatDuration(currentDuration));
+    const sum = sumDuration(duration, startActiveDate);
+    setCurrentDuration(formatDuration(sum, FormatDuration.Detail));
   };
 
   const handleAction = isActive ? onStop : onStart;

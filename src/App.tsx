@@ -1,29 +1,41 @@
 import React, { FC, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { RootStore, RootStoreModel, RootStoreProvider } from "@models/root-store";
 import { DashboardScreen } from "@screens/dashboard";
 import { Tracker, TrackerProject } from "@ts/tracker";
 import { renderCond } from "@utils/rendering";
 import { storageGetItem, StorageKey } from "@utils/storage";
+import { color } from "./theme/color";
 
 const mockTrackers: Tracker[] = [
   {
-    id: "adw1",
+    id: "test-id-1",
     name: "Test",
     project: TrackerProject.Mango,
     duration: 0,
+    startDate: new Date(),
     startActiveDate: new Date(),
   },
   {
-    id: "dawd2",
+    id: "test-id-2",
+    name: "Test",
+    project: TrackerProject.Mango,
+    duration: 32300,
+    startDate: new Date(),
+  },
+  {
+    id: "test-id-3",
     name: "Test 1",
     project: TrackerProject.KiwiAndCo,
     duration: 12300,
+    startDate: new Date(new Date().setDate(new Date().getDate() - 1)),
   },
   {
-    id: "asd33",
+    id: "test-id-4",
     name: "Test 2",
     project: TrackerProject.UXReview,
     duration: 20123123,
+    startDate: new Date(new Date().setDate(new Date().getDate() - 1)),
   },
 ];
 const App: FC = () => {
@@ -47,6 +59,7 @@ const App: FC = () => {
     const parsedTrackerList = restoredTrackerList.map((tracker) => ({
       ...tracker,
       startActiveDate: tracker.startActiveDate ? new Date(tracker.startActiveDate) : undefined,
+      startDate: new Date(tracker.startDate),
     }));
 
     const rootStoreInit = RootStoreModel.create({
@@ -56,10 +69,19 @@ const App: FC = () => {
   };
 
   return renderCond(isReady, () => (
-    <RootStoreProvider value={rootStore as RootStore}>
-      <DashboardScreen />
-    </RootStoreProvider>
+    <View style={styles.container}>
+      <RootStoreProvider value={rootStore as RootStore}>
+        <DashboardScreen />
+      </RootStoreProvider>
+    </View>
   ));
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: color.grey,
+    flex: 1,
+  },
+});
 
 export default App;

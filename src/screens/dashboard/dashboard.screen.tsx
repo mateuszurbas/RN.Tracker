@@ -1,31 +1,31 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import { observer } from "mobx-react-lite";
 import { View } from "react-native";
-import { TrackerItem } from "@components/tracker-item";
+import { TrackerGroup } from "@components/tracker-group";
 import { useStores } from "@models/root-store";
-import { Container } from "./dashboard.styles";
+import { groupBy } from "@utils/normalize";
+import { Container, TrackerGroupContainer } from "./dashboard.styles";
 
 export const DashboardScreen: FC = observer(() => {
   const {
     trackers: { trackerList, activateTracker, stopTrackers },
   } = useStores();
 
-  const trackers = trackerList.map((tracker) => {
-    const handleOnStart = () => activateTracker(tracker.id);
-    const handleOnStop = () => stopTrackers();
+  const groupByDateTrackerList = useMemo(
+    () => groupBy(trackerList, (tracker) => tracker.startDate?.toISOString()),
+    [trackerList],
+  );
 
-    return (
-      <TrackerItem
-        key={tracker.id}
-        name={tracker.name}
-        project={tracker.project}
-        duration={tracker.duration}
-        startActiveDate={tracker.startActiveDate}
-        onStart={handleOnStart}
-        onStop={handleOnStop}
+  const trackers = Object.entries(groupByDateTrackerList).map(([key, list]) => (
+    <TrackerGroupContainer key={key}>
+      <TrackerGroup
+        title={key}
+        trackers={list}
+        activateTracker={activateTracker}
+        stopTrackers={stopTrackers}
       />
-    );
-  });
+    </TrackerGroupContainer>
+  ));
 
   const header = <View />;
 
