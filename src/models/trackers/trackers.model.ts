@@ -45,7 +45,7 @@ export const TrackersModel = types
   })
 
   .views((self) => ({
-    get getActiveTracker() {
+    get activeTracker() {
       return self.trackerList.find((tracker) => tracker.startActiveDate);
     },
   }));

@@ -4,11 +4,18 @@ import { View } from "react-native";
 import { TrackerGroup } from "@components/tracker-group";
 import { useStores } from "@models/root-store";
 import { groupBy } from "@utils/normalize";
-import { Container, Content, TrackerGroupContainer } from "./dashboard.styles";
+import {
+  ActiveTrackerContainer,
+  Container,
+  Content,
+  TrackerGroupContainer,
+} from "./dashboard.styles";
+import { renderCond } from "@utils/rendering";
+import { TrackerItem } from "@components/tracker-item";
 
 export const DashboardScreen: FC = observer(() => {
   const {
-    trackers: { trackerList, activateTracker, stopTrackers },
+    trackers: { trackerList, activateTracker, stopTrackers, activeTracker },
   } = useStores();
 
   const groupByDateTrackerList = useMemo(
@@ -27,12 +34,33 @@ export const DashboardScreen: FC = observer(() => {
     </TrackerGroupContainer>
   ));
 
+  const active = renderCond(activeTracker, (activeTracker) => {
+    const handleOnStart = () => activateTracker(activeTracker.id);
+    const handleOnStop = () => stopTrackers();
+
+    return (
+      <ActiveTrackerContainer>
+        <TrackerItem
+          name={activeTracker.name}
+          project={activeTracker.project}
+          duration={activeTracker.duration}
+          startActiveDate={activeTracker.startActiveDate}
+          onStart={handleOnStart}
+          onStop={handleOnStop}
+        />
+      </ActiveTrackerContainer>
+    );
+  });
+
   const header = <View />;
 
   return (
-    <Container>
-      {header}
-      <Content>{trackers}</Content>
-    </Container>
+    <>
+      <Container>
+        {header}
+        <Content>{trackers}</Content>
+      </Container>
+      {active}
+    </>
   );
 });
