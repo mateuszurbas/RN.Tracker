@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { TrackerGroup } from "@components/tracker-group";
 import { useStores } from "@models/root-store";
 import { groupBy } from "@utils/normalize";
-import { Container, TrackerGroupContainer } from "./dashboard.styles";
+import { Container, Content, TrackerGroupContainer } from "./dashboard.styles";
 
 export const DashboardScreen: FC = observer(() => {
   const {
@@ -12,7 +12,7 @@ export const DashboardScreen: FC = observer(() => {
   } = useStores();
 
   const groupByDateTrackerList = useMemo(
-    () => groupBy(trackerList, (tracker) => tracker.startDate?.toISOString()),
+    () => groupBy(trackerList, (tracker) => tracker.startDate?.toDateString()),
     [trackerList],
   );
 
@@ -32,7 +32,7 @@ export const DashboardScreen: FC = observer(() => {
   return (
     <Container>
       {header}
-      {trackers}
+      <Content>{trackers}</Content>
     </Container>
   );
 });

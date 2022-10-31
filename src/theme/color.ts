@@ -5,6 +5,9 @@ export const color = {
   dark: "#161722",
   grey: "#F1F1F1",
   red: "#900",
+  blue: "#3FBDF2",
+  green: "#54D622",
+  yellow: "#E7B435",
 } as const;
 
 type Keys = keyof typeof color;

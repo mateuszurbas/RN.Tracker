@@ -6,11 +6,14 @@ import { FormatDuration, formatDuration, sumDuration } from "@utils/time";
 import {
   ActionButton,
   ActionSection,
+  Circle,
   Container,
   Duration,
   DurationContainer,
   InformationSection,
   Project,
+  ProjectContainer,
+  ProjectSection,
   Title,
 } from "./tracker-item.styles";
 import { TrackerItemProps } from "./tracker-item.types";
@@ -54,7 +57,12 @@ export const TrackerItem: FC<TrackerItemProps> = ({
     <Container testID={testID}>
       <InformationSection>
         <Title>{name}</Title>
-        <Project>{project}</Project>
+        <ProjectSection>
+          <Circle trackerProject={project} />
+          <ProjectContainer>
+            <Project trackerProject={project}>{project}</Project>
+          </ProjectContainer>
+        </ProjectSection>
       </InformationSection>
 
       <ActionSection>
