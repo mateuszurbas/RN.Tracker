@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TrackerGroup } from "@components/tracker-group";
 import { TrackerItem } from "@components/tracker-item";
 import { useStores } from "@models/root-store";
-import { Tracker } from "@ts/tracker";
+import { Tracker, TrackerProject } from "@ts/tracker";
 import { groupBy } from "@utils/normalize";
 import { renderCond } from "@utils/rendering";
 import { DashboardDetailModal } from "./components/dashboard-detail-modal";
@@ -31,7 +31,14 @@ export const DashboardScreen: FC = observer(() => {
   const paddingBottom = Platform.OS === "ios" ? saveArea.bottom : 10;
 
   const {
-    trackers: { trackerList, activateTracker, stopTrackers, activeTracker, removeTracker },
+    trackers: {
+      trackerList,
+      activateTracker,
+      stopTrackers,
+      activeTracker,
+      removeTracker,
+      addTracker,
+    },
   } = useStores();
 
   const groupByDateTrackerList = useMemo(
@@ -48,6 +55,20 @@ export const DashboardScreen: FC = observer(() => {
     if (selectedTracker) {
       removeTracker(selectedTracker.id);
     }
+  };
+
+  const handleOnAddTracker = (data: { name: string; project: TrackerProject }) => {
+    if (data) {
+      addTracker(data.name, data.project);
+    }
+  };
+
+  // TODO: Add tracker from modal
+  const addNewTracker = () => {
+    handleOnAddTracker({
+      name: "Test 1",
+      project: TrackerProject.UXReview,
+    });
   };
 
   const trackers = Object.entries(groupByDateTrackerList).map(([key, list]) => (
@@ -82,7 +103,7 @@ export const DashboardScreen: FC = observer(() => {
 
   const header = (
     <Header paddingTop={paddingTop}>
-      <ActionButton>
+      <ActionButton onPress={addNewTracker}>
         <ButtonSection>
           <TextButton>Add</TextButton>
           <AddIcon />

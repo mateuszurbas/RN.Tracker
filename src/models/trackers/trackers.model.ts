@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
-import { Tracker } from "@ts/tracker";
+import uuid from "react-native-uuid";
+import { Tracker, TrackerProject } from "@ts/tracker";
 import { StorageKey, storageSetItem } from "@utils/storage";
 
 export const TrackersModel = types
@@ -31,6 +32,19 @@ export const TrackersModel = types
       },
       removeTracker: (id: string) => {
         const updatedTrackerList = self.trackerList.filter((t) => t.id !== id);
+        storageSetItem(StorageKey.TrackerData, updatedTrackerList);
+        self.trackerList = updatedTrackerList;
+      },
+      addTracker: (name: string, project: TrackerProject) => {
+        const newTracker: Tracker = {
+          id: uuid.v4().toString(),
+          name,
+          project,
+          startDate: new Date(),
+          duration: 0,
+        };
+        const updatedTrackerList = [newTracker, ...self.trackerList];
+
         storageSetItem(StorageKey.TrackerData, updatedTrackerList);
         self.trackerList = updatedTrackerList;
       },
