@@ -48,3 +48,23 @@ export const CreateText = styled(CommonText).attrs({
   color: ${color.green2};
   font-weight: ${fontWeight.bold};
 `;
+
+export const ErrorText = styled(CommonText).attrs({
+  size: CommonTextSize.$15,
+})`
+  margin-top: ${spacing.$10};
+  color: ${color.red};
+  font-weight: ${fontWeight.semiBold};
+`;
+
+export const InputContainer = styled.View`
+  margin: ${spacing.$10};
+  width: 100%;
+`;
+
+export const Input = styled.TextInput`
+  border-radius: ${borderRadius.regular};
+  border: 1px solid ${color.grey};
+  padding: ${spacing.$10};
+  width: 100%;
+`;

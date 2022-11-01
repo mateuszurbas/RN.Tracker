@@ -77,7 +77,7 @@ export const DashboardScreen: FC = observer(() => {
     </TrackerGroupContainer>
   ));
 
-  const active = renderCond(activeTracker, (activeTracker) => {
+  const activeTrackerTab = renderCond(activeTracker, (activeTracker) => {
     const handleOnStart = () => activateTracker(activeTracker.id);
     const handleOnStop = () => stopTrackers();
 
@@ -112,7 +112,7 @@ export const DashboardScreen: FC = observer(() => {
       <Container>
         <Content>{trackers}</Content>
       </Container>
-      {active}
+      {activeTrackerTab}
       <DashboardDetailModal
         visible={isDetailModalVisible}
         toggleVisibility={() => setIsDetailModalVisible(!isDetailModalVisible)}

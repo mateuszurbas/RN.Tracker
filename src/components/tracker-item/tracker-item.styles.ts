@@ -39,6 +39,7 @@ export const Project = styled(CommonText).attrs({
   size: CommonTextSize.$15,
 })<ProjectProps>`
   font-weight: ${fontWeight.semiBold};
+  color: ${color.magenta};
 
   ${({ trackerProject: type }) =>
     cond([
@@ -67,6 +68,7 @@ export const Circle = styled.View<ProjectProps>`
   width: 6px;
   height: 6px;
   border-radius: 3px;
+  background-color: ${color.magenta};
 
   ${({ trackerProject: type }) =>
     cond([

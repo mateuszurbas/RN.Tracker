@@ -9,6 +9,7 @@ export const color = {
   green1: "#54D622",
   green2: "#50B828",
   yellow: "#E7B435",
+  magenta: "#BA55D3",
 } as const;
 
 type Keys = keyof typeof color;
