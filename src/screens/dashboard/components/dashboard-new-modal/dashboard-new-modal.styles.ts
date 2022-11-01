@@ -57,14 +57,6 @@ export const ErrorText = styled(CommonText).attrs({
   font-weight: ${fontWeight.semiBold};
 `;
 
-export const InputContainer = styled.View`
-  margin: ${spacing.$10};
-  width: 100%;
-`;
-
-export const Input = styled.TextInput`
-  border-radius: ${borderRadius.regular};
-  border: 1px solid ${color.grey};
-  padding: ${spacing.$10};
-  width: 100%;
+export const TextFieldContainer = styled.View`
+  margin-top: ${spacing.$10};
 `;

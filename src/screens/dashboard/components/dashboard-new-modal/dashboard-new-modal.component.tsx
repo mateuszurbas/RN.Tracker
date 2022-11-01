@@ -1,34 +1,38 @@
 import React from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { RegisterOptions, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView } from "react-native";
 import Modal from "react-native-modal";
+import { TextField } from "@components/text-field";
 import { TrackerProject } from "@ts/tracker";
-import { renderCond } from "@utils/rendering";
 import {
   Container,
   DetailSection,
   Content,
   modalStyles,
-  Section,
   Action,
   CancelText,
   CreateText,
-  ErrorText,
-  Input,
-  InputContainer,
+  TextFieldContainer,
 } from "./dashboard-new-modal.styles";
 import { DashboardNewModalProps } from "./dashboard-new-modal.types";
 
 const eventThrottle = 16;
 
-type NewTrackerInputs = {
-  name: string;
-  project: TrackerProject;
+const formName = "addTracker";
+
+const fieldNames = {
+  name: "name",
+  project: "project",
+} as const;
+
+type FormValues = {
+  [fieldNames.name]: string;
+  [fieldNames.project]: TrackerProject;
 };
 
-const newTrackerDefaultValues: NewTrackerInputs = {
-  name: "",
-  project: TrackerProject.UXReview,
+const defaultValues = {
+  [fieldNames.name]: "",
+  [fieldNames.project]: TrackerProject.Mango,
 };
 
 export const DashboardNewModal = ({
@@ -39,13 +43,24 @@ export const DashboardNewModal = ({
   const {
     handleSubmit,
     control,
-    formState: { errors },
     reset: resetForm,
-  } = useForm<NewTrackerInputs>({
-    defaultValues: newTrackerDefaultValues,
+  } = useForm<FormValues>({
+    defaultValues,
   });
 
-  const handleOnCreate: SubmitHandler<NewTrackerInputs> = (data) => {
+  const validationRules: RegisterOptions = {
+    required: {
+      value: true,
+      message: "This field is required",
+    },
+  };
+
+  const handleOnCancel = () => {
+    resetForm();
+    toggleVisibility();
+  };
+
+  const handleOnCreate: SubmitHandler<FormValues> = (data) => {
     if (data) {
       onCreate({
         name: data.name,
@@ -56,9 +71,6 @@ export const DashboardNewModal = ({
     }
   };
 
-  const errorName = renderCond(errors.name, () => <ErrorText>Field is required</ErrorText>);
-
-  // TODO: Add Input to separate component
   // TODO: Create dropdown with input to select a project
 
   return (
@@ -66,44 +78,33 @@ export const DashboardNewModal = ({
       <Container>
         <ScrollView scrollEventThrottle={eventThrottle}>
           <Content>
-            <Section>
-              <InputContainer>
-                <Controller
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                      placeholder="Enter a name"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                    />
-                  )}
-                  name="name"
-                />
-                {errorName}
-              </InputContainer>
+            <TextFieldContainer>
+              <TextField
+                label={"Tracker name"}
+                placeholder={"Enter a tracker name"}
+                formName={formName}
+                control={control}
+                name={fieldNames.name}
+                rules={validationRules}
+              />
+            </TextFieldContainer>
 
-              <InputContainer>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                      placeholder="Enter a project name"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                    />
-                  )}
-                  name="project"
-                />
-              </InputContainer>
-            </Section>
+            <TextFieldContainer>
+              <TextField
+                label={"Project"}
+                placeholder={"Enter a project name"}
+                formName={formName}
+                control={control}
+                name={fieldNames.project}
+                rules={validationRules}
+              />
+            </TextFieldContainer>
+
             <DetailSection>
               <Action onPress={handleSubmit(handleOnCreate)}>
                 <CreateText>Create Tracker</CreateText>
               </Action>
-              <Action onPress={toggleVisibility}>
+              <Action onPress={handleOnCancel}>
                 <CancelText>Cancel</CancelText>
               </Action>
             </DetailSection>

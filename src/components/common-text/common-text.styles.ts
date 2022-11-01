@@ -7,6 +7,11 @@ type ContainerStyledProps = {
   size: CommonTextSize;
 };
 
+const smallFontStyles = css`
+  font-size: ${fontSize.$11};
+  font-weight: ${fontWeight.regular};
+`;
+
 const regularFontStyles = css`
   font-size: ${fontSize.$15};
   font-weight: ${fontWeight.regular};
@@ -23,6 +28,7 @@ export const Container = styled.Text<ContainerStyledProps>`
 
   ${({ size }) =>
     cond([
+      [size === CommonTextSize.$11, smallFontStyles],
       [size === CommonTextSize.$15, regularFontStyles],
       [size === CommonTextSize.$17, headerFontStyles],
     ])}
