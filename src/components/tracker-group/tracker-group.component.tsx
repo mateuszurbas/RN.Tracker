@@ -24,6 +24,10 @@ export const TrackerGroup: FC<TrackerGroupProps> = ({
   const activeTracker = trackers.find((t) => t.startActiveDate);
 
   useEffect(() => {
+    getCurrentDuration();
+  }, [trackers]);
+
+  useEffect(() => {
     if (activeTracker) {
       const interval = setInterval(getCurrentDuration, 1000);
       return () => clearInterval(interval);
