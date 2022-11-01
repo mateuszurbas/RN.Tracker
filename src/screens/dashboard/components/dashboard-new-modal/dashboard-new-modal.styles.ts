@@ -48,3 +48,15 @@ export const CreateText = styled(CommonText).attrs({
   color: ${color.green2};
   font-weight: ${fontWeight.bold};
 `;
+
+export const ErrorText = styled(CommonText).attrs({
+  size: CommonTextSize.$15,
+})`
+  margin-top: ${spacing.$10};
+  color: ${color.red};
+  font-weight: ${fontWeight.semiBold};
+`;
+
+export const TextFieldContainer = styled.View`
+  margin-top: ${spacing.$10};
+`;

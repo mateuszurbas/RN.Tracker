@@ -5,6 +5,7 @@ export const fontWeight = {
 };
 
 export const fontSize = {
+  $11: "11px",
   $15: "15px",
   $17: "17px",
 };
