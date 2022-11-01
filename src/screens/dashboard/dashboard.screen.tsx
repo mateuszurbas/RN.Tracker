@@ -3,23 +3,23 @@ import { observer } from "mobx-react-lite";
 import { Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TrackerGroup } from "@components/tracker-group";
-import { TrackerItem } from "@components/tracker-item";
 import { useStores } from "@models/root-store";
 import { Tracker, TrackerProject } from "@ts/tracker";
 import { groupBy } from "@utils/normalize";
 import { renderCond } from "@utils/rendering";
+import { ActiveTracker } from "./components/active-tracker";
 import { DashboardDetailModal } from "./components/dashboard-detail-modal";
 import { DashboardNewModal } from "./components/dashboard-new-modal";
 import {
   Header,
   Container,
-  Content,
+  ScrollViewContent,
   TrackerGroupContainer,
-  ActiveTrackerContainer,
   ActionButton,
   AddIcon,
   TextButton,
   ButtonSection,
+  ScrollViewOffset,
 } from "./dashboard.styles";
 
 export const DashboardScreen: FC = observer(() => {
@@ -28,9 +28,7 @@ export const DashboardScreen: FC = observer(() => {
   const [isNewModalVisible, setIsNewModalVisible] = useState(false);
 
   const saveArea = useSafeAreaInsets();
-
   const paddingTop = Platform.OS === "ios" ? saveArea.top : 10;
-  const paddingBottom = Platform.OS === "ios" ? saveArea.bottom : 10;
 
   const {
     trackers: {
@@ -77,23 +75,7 @@ export const DashboardScreen: FC = observer(() => {
     </TrackerGroupContainer>
   ));
 
-  const activeTrackerTab = renderCond(activeTracker, (activeTracker) => {
-    const handleOnStart = () => activateTracker(activeTracker.id);
-    const handleOnStop = () => stopTrackers();
-
-    return (
-      <ActiveTrackerContainer paddingBottom={paddingBottom}>
-        <TrackerItem
-          name={activeTracker.name}
-          project={activeTracker.project}
-          duration={activeTracker.duration}
-          startActiveDate={activeTracker.startActiveDate}
-          onStart={handleOnStart}
-          onStop={handleOnStop}
-        />
-      </ActiveTrackerContainer>
-    );
-  });
+  const activeTrackerOffset = renderCond(activeTracker, () => <ScrollViewOffset />);
 
   const header = (
     <Header paddingTop={paddingTop}>
@@ -110,9 +92,12 @@ export const DashboardScreen: FC = observer(() => {
     <>
       {header}
       <Container>
-        <Content>{trackers}</Content>
+        <ScrollViewContent>
+          {trackers}
+          {activeTrackerOffset}
+        </ScrollViewContent>
       </Container>
-      {activeTrackerTab}
+      <ActiveTracker tracker={activeTracker} stopTracker={stopTrackers} />
       <DashboardDetailModal
         visible={isDetailModalVisible}
         toggleVisibility={() => setIsDetailModalVisible(!isDetailModalVisible)}

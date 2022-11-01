@@ -17,5 +17,5 @@ Opis:
 - module-resolver,
 - setup JEST-a,
 - niektóre komponenty mają testy (pokazałem tylko przykłady),
-- chciałem dodać reanimated v2 ale zabrakło mi czasu ;),
+- reanimated v2 do animacji - wyjezdzający aktywny tracker,
 - ujednolicony styl
