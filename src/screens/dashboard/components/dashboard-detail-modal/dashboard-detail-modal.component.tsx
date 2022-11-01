@@ -29,7 +29,7 @@ export const DashboardDetailModal = ({
     toggleVisibility();
   };
 
-  // TODO: Create a button component and replased Actions with this component
+  // TODO: Create a button component and replaced Actions with this component
 
   return (
     <Modal isVisible={visible} propagateSwipe={true} style={modalStyles}>
