@@ -1,21 +1,5 @@
 # tracker
+App to track a specific task
 
-Odpalenie porjektu
+https://user-images.githubusercontent.com/88428858/200142730-860d8fab-1e68-417d-902f-7118706f836c.mp4
 
-- yarn instal
-- cd ios -> pod install
-
-Opis:
-
-- Płaska struktura plików,
-- Brak react navigation poniewaz nie było takiej potrzeby,
-- MobX do zarzadzania stanem aplikacji,
-- React hook forms dla formularzy,
-- React Native Modal dla modal,
-- konfiguracja eslint,
-- prettier,
-- module-resolver,
-- setup JEST-a,
-- niektóre komponenty mają testy (pokazałem tylko przykłady),
-- reanimated v2 do animacji - wyjezdzający aktywny tracker,
-- ujednolicony styl
